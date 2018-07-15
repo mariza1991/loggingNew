@@ -8,6 +8,7 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 import tools.Screenshot;
+import tools.WriteLog;
 
 import java.io.*;
 import java.util.Date;
@@ -40,32 +41,8 @@ public class TestListener implements ITestListener {
         Screenshot screenshot = new Screenshot();
         screenshot.makeScreenshot();
 
-        LogEntries logEntries = getDriver().manage().logs().get(LogType.PERFORMANCE);
-
-        File file = new File("target/output/log.txt");
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter(file, true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        for(LogEntry entry : logEntries) {
-            try {
-                writer.write(entry.getLevel() + " " + entry.getMessage());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        WriteLog writeLog = new WriteLog();
+        writeLog.driverLog();
     }
 
     public void onTestSkipped(ITestResult iTestResult) {
